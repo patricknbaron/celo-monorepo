@@ -3,8 +3,8 @@ import { isEmpty } from 'lodash'
 import * as RNFS from 'react-native-fs'
 import Share from 'react-native-share'
 import { call, put } from 'redux-saga/effects'
-import { showMessage } from 'src/alert/actions'
 import { ErrorMessages } from 'src/app/ErrorMessages'
+import i18n from 'src/i18n'
 import { validateRecipientAddressSuccess } from 'src/identity/actions'
 import { AddressToE164NumberType, E164NumberToAddressType } from 'src/identity/reducer'
 import { replace } from 'src/navigator/NavigationService'
@@ -69,7 +69,7 @@ function* handleSecureSend(
     address.toLowerCase()
   )
   if (!possibleRecievingAddressesFormatted.includes(userScannedAddress)) {
-    yield put(showMessage(ErrorMessages.QR_FAILED_INVALID_RECIPIENT))
+    Logger.showMessage(i18n.t(ErrorMessages.QR_FAILED_INVALID_RECIPIENT, { ns: 'global' }))
     return false
   }
 
@@ -92,11 +92,11 @@ export function* handleBarcode(
     Logger.warn(TAG, 'QR code read failed with ' + e)
   }
   if (typeof data !== 'object' || isEmpty(data.address)) {
-    yield put(showMessage(ErrorMessages.QR_FAILED_NO_ADDRESS))
+    Logger.showMessage(i18n.t(ErrorMessages.QR_FAILED_NO_ADDRESS, { ns: 'global' }))
     return
   }
   if (!isValidAddress(data.address)) {
-    yield put(showMessage(ErrorMessages.QR_FAILED_INVALID_ADDRESS))
+    Logger.showMessage(i18n.t(ErrorMessages.QR_FAILED_INVALID_ADDRESS, { ns: 'global' }))
     return
   }
 
